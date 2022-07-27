@@ -4,6 +4,10 @@
   "homepage": "https://artisan7.github.io",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -44,6 +48,9 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0"
+    "autoprefixer": "^10.4.7",
+    "gh-pages": "^4.0.0",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.6"
   }
 }
