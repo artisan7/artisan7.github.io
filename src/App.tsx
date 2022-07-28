@@ -1,21 +1,23 @@
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faVideo } from "@fortawesome/free-solid-svg-icons"
 import { faGithub } from "@fortawesome/free-brands-svg-icons"
 
-import IconLink from './components/IconLink';
 import games from './data/games';
 import profileImage from './profile-image.jpg';
 
+import IconLink from './components/IconLink';
 import './App.css';
 
 function App() {
   const [selected, setGame] = useState(games[0]);
+  const gamesContainer =  useRef<HTMLDivElement>(null);
 
-  const updateSelectedGame = (newSelected: number) => {
+  const handleUpdateSelectedGame = (newSelected: number) => {
     setGame(games[newSelected]);
-    const children = document.querySelector("#games-menu")?.children;
+
+    let children = gamesContainer.current?.children;
+
     if (children) {
       for (let i=0; i<children?.length; i++) {
         children[i].classList.remove("selected")
@@ -30,12 +32,16 @@ function App() {
       <header className="App-header">
         <h1 className="text-7xl">Hi,</h1>
         <div className="flex flex-col md:flex-row items-center">
-          <h2 className="text-5xl max-w-4xl">I am <span className="font-semibold">Junrick Bation</span>, a developer who loves game development and learning new things.</h2>
+          <h2 className="text-5xl max-w-4xl">I am <span className="font-semibold">Junrick Bation</span>, a developer who loves making games and learning new things.</h2>
           <img src={profileImage} className="rounded-full m-12"/>
+        </div>
+        <div className="flex flex-row">
+          <a href="#skills" className="mx-4">SKILLS</a>
+          <a href="#featured-works" className="mx-4">FEATURED WORKS</a>
         </div>
       </header>
       
-      <div className="min-h-screen min-w-screen flex flex-col justify-center items-center">
+      <div id="skills" className="min-h-screen min-w-screen flex flex-col justify-center items-center">
         <h1 className="text-5xl mb-12">SKILLS</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
@@ -46,6 +52,7 @@ function App() {
               <h6>Python</h6>
               <h6>Javascript</h6>
               <h6>Typescript</h6>
+              <h6>Rust</h6>
             </div>
           </div>
           <div>
@@ -68,25 +75,25 @@ function App() {
         </div>
       </div>
 
-      <div className="min-h-screen min-w-screen flex flex-col justify-center items-center games-section">
+      <div id="featured-works" className="min-h-screen min-w-screen flex flex-col justify-center items-center">
         <div className="w-6/12">
           <h1 className="text-5xl mb-12">FEATURED WORKS</h1>
-          <div className="flex flex-row justify-evenly mb-12" id="games-menu">
+          <div ref={gamesContainer} className="flex flex-row justify-evenly items-center mb-12">
             {
               games.map((game, idx) =>
                 <h4
                   key={idx}
                   className={`text-2xl nav-item ${idx===0?"selected":""}`}
-                  onClick={() => updateSelectedGame(idx)}
+                  onClick={() => handleUpdateSelectedGame(idx)}
                 >
                   {game.title}
                 </h4>
               )
             }
           </div>
-          <div className="flex flex-col md:flex-row max-w-7xl">
-            <div className="mr-12 w-full">
-              <img src={selected.image} />
+          <div className="flex flex-col md:flex-row">
+            <div className="flex justify-center mr-12 w-full">
+              <img src={selected.image} className="max-h-64" />
             </div>
             <div className="flex flex-col justify-evenly items-center">
             <div className="text-xl font-semibold">
@@ -95,27 +102,36 @@ function App() {
               <div className="text-lg">
                 {selected.description}
               </div>
-              <div>
-                {
-                  selected.buildUrl?
-                    <IconLink icon={faPlay} url={selected.buildUrl} label={"Play " + selected.title} />
-                  : null
-                }
-                {
-                  selected.videoUrl?
-                    <IconLink icon={faVideo} url={selected.videoUrl} label="Video Showcase" />
-                  : null
-                }
-                {
-                  selected.sourceCodeUrl?
-                    <IconLink icon={faGithub} url={selected.sourceCodeUrl} label="Source Code" />
-                  : null
-                }
+              <div className="flex flex-col md:flex-row justify-between items-center w-full">
+                <div className="flex flex-row my-8 md:my-2">
+                  {
+                    selected.buildUrl?
+                      <IconLink icon={faPlay} url={selected.buildUrl} label={"Play " + selected.title} />
+                    : null
+                  }
+                  {
+                    selected.videoUrl?
+                      <IconLink icon={faVideo} url={selected.videoUrl} label="Video Showcase" />
+                    : null
+                  }
+                  {
+                    selected.sourceCodeUrl?
+                      <IconLink icon={faGithub} url={selected.sourceCodeUrl} label="Source Code" />
+                    : null
+                  }
+                </div>
+                <div>
+                  Made with<IconLink icon={selected.engine.logo} url={selected.engine.website} label={selected.engine.name} custom />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <footer>
+        <a href="https://github.com/artisan7" target="_blank">Designed and Developed by Junrick Bation</a>
+      </footer>
     </div>
   );
 }
